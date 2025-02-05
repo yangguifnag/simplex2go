@@ -1,1 +1,1 @@
-package simplex2go
+package main

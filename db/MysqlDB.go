@@ -1,13 +1,13 @@
 package db
 
 import (
+	"github.com/yangguifnag/simplex2go/common"
+	"github.com/yangguifnag/simplex2go/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"log"
 	"os"
-	"simplex2go/common"
-	"simplex2go/utils"
 	"time"
 )
 import "gorm.io/gorm"
@@ -24,7 +24,7 @@ func (db *MysqlDB) GetDB(name string) *gorm.DB {
 			SlowThreshold: time.Nanosecond, // 慢 SQL 阈值
 			LogLevel:      logger.Info,     // Log level
 			Colorful:      true,            // 禁用彩色打印
-			
+
 		},
 	)
 	DB, _ := gorm.Open(mysql.Open(utils.GetDSN(module)), &gorm.Config{

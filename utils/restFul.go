@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"simplex2go/common"
+	"github.com/yangguifnag/simplex2go/common"
 	"time"
 )
 
