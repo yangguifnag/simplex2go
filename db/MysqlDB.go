@@ -48,10 +48,62 @@ func (db *MysqlDB) GetDB(name string) *gorm.DB {
 	defer func(sqlDB *sql.DB) {
 		err := sqlDB.Close()
 		if err != nil {
-			log.Fatalf("关闭数据库连接失败: %v", err)
+			log.Fatalf("关闭数据库[%v]连接失败: %v", name, err)
 		}
 	}(sqlDB)
 	sqlDB.SetMaxIdleConns(100) //设置最大连接数
 	sqlDB.SetMaxOpenConns(100) //设置最大的空闲连接数
 	return DB
+}
+
+func (db *MysqlDB) Init() {
+
+	if db.Config == nil {
+		log.Fatalf("数据库配置为空")
+		return
+	}
+
+	db.db = make(map[string]*gorm.DB)
+	for k, _ := range db.Config {
+		db.GetDB(k)
+	}
+}
+
+func (db *MysqlDB) Close() {
+	for name, v := range db.db {
+		sqlDB, _ := v.DB()
+		err := sqlDB.Close()
+		if err != nil {
+			log.Fatalf("关闭数据库[%v]连接失败: %v", name, err)
+		}
+	}
+}
+
+func (db *MysqlDB) CloseByName(name string) {
+	sqlDB, _ := db.db[name].DB()
+	err := sqlDB.Close()
+	if err != nil {
+		log.Fatalf("关闭数据库[%v]连接失败: %v", name, err)
+	}
+}
+
+func (db *MysqlDB) AddConfig(name string, config common.MysqlConfigModule) {
+	if db.Config == nil {
+		db.Config = make(map[string]common.MysqlConfigModule)
+
+	}
+
+	//如果重名不添加
+	if db.Config[name].Host == config.Host {
+		return
+	}
+
+	db.Config[name] = config
+	db.GetDB(name)
+}
+
+func (db *MysqlDB) RemoveConfig(name string) {
+	db.CloseByName(name)
+	delete(db.Config, name)
+	delete(db.db, name)
 }
