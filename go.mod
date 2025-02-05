@@ -1,4 +1,4 @@
-module simplex2go
+module github.com/yangguifnag/simplex2go
 
 go 1.19
 
