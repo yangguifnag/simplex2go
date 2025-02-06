@@ -9,18 +9,18 @@ import (
 )
 
 type GoIrisConsul struct {
-	consulConfig consul.BaseConfig
-	irisConfig   iris_.Iris
+	ConsulConfig consul.BaseConfig
+	IrisConfig   iris_.Iris
 }
 
 func (conf *GoIrisConsul) Init() (*iris.Application, *consulapi.Client, error) {
-	consulApp, err := conf.consulConfig.RegisterService()
+	consulApp, err := conf.ConsulConfig.RegisterService()
 	if err != nil {
 		return nil, nil, err
 	}
 
-	irisApp := conf.irisConfig.Init()
-	err = irisApp.Run(iris.Addr(fmt.Sprintf(":%d", conf.consulConfig.Port)))
+	irisApp := conf.IrisConfig.Init()
+	err = irisApp.Run(iris.Addr(fmt.Sprintf(":%d", conf.ConsulConfig.Port)))
 	if err != nil {
 		return nil, nil, err
 	}
