@@ -11,6 +11,8 @@ import (
 type GoIrisConsul struct {
 	ConsulConfig consul.BaseConfig
 	IrisConfig   iris_.Iris
+	irisApp      *iris.Application
+	consulApp    *consulapi.Client
 }
 
 func (conf *GoIrisConsul) Init() (*iris.Application, *consulapi.Client, error) {
@@ -20,10 +22,21 @@ func (conf *GoIrisConsul) Init() (*iris.Application, *consulapi.Client, error) {
 	}
 
 	irisApp := conf.IrisConfig.Init()
-	err = irisApp.Run(iris.Addr(fmt.Sprintf(":%d", conf.ConsulConfig.Port)))
-	if err != nil {
-		return nil, nil, err
-	}
+	//err = irisApp.Run(iris.Addr(fmt.Sprintf(":%d", conf.ConsulConfig.Port)))
+	//if err != nil {
+	//	return nil, nil, err
+	//}
 
 	return irisApp, consulApp, nil
+}
+
+func (conf *GoIrisConsul) IrisRun() (*iris.Application, error) {
+	irisApp := conf.irisApp
+	err := irisApp.Run(iris.Addr(fmt.Sprintf(":%d", conf.ConsulConfig.Port)))
+	if err != nil {
+		return nil, err
+	}
+
+	return irisApp, nil
+
 }
