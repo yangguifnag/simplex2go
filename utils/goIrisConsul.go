@@ -26,6 +26,8 @@ func (conf *GoIrisConsul) Init() (*iris.Application, *consulapi.Client, error) {
 	//if err != nil {
 	//	return nil, nil, err
 	//}
+	conf.irisApp = irisApp
+	conf.consulApp = consulApp
 
 	return irisApp, consulApp, nil
 }
