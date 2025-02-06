@@ -12,6 +12,12 @@ type Iris struct {
 	ConsulCheckName string `json:"consulCheckName"`
 }
 
+func internalServerError(ctx iris.Context) {
+	_, err := ctx.WriteString("系统错误")
+	if err != nil {
+		return
+	}
+}
 func (i *Iris) Init() *iris.Application {
 	app := iris.New()
 
@@ -23,6 +29,7 @@ func (i *Iris) Init() *iris.Application {
 			ctx.JSON(iris.Map{"status": "UP"})
 		})
 	}
+	app.OnErrorCode(iris.StatusInternalServerError, internalServerError)
 	return app
 
 }

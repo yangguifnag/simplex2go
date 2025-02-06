@@ -20,14 +20,14 @@ type BaseConfig struct {
 	Check   CheckConfig
 }
 
-func (conf *BaseConfig) RegisterService() error {
+func (conf *BaseConfig) RegisterService() (*consulapi.Client, error) {
 	if conf.Check.CheckName == "" {
 		conf.Check.CheckName = DEFAULT_CHECK_NAME
 	}
 	config := consulapi.DefaultConfig()
 	client, err := consulapi.NewClient(config)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	registration := &consulapi.AgentServiceRegistration{
 		ID:      conf.ID,
@@ -43,8 +43,8 @@ func (conf *BaseConfig) RegisterService() error {
 	}
 	err = client.Agent().ServiceRegister(registration)
 	if err != nil {
-		return err
+		return client, err
 	}
-	return nil
+	return client, nil
 
 }
