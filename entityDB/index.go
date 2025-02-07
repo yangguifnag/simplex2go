@@ -9,7 +9,7 @@ type TransactionAction func(tx *gorm.DB) *gorm.DB
 type TransactionActionV2 func(tx *gorm.DB, tranFn ...any) *gorm.DB
 
 type TransactionActionV2Struct struct {
-	Method TransactionActionV2
+	Method *TransactionActionV2
 	Args   []any
 }
 
