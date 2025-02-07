@@ -11,9 +11,9 @@ type DbStruct[T, D any] struct {
 }
 
 func (t *DbStruct[T, D]) check() bool {
-	flag := t.MysqlBD != nil && t.Entity != nil
+	flag := true
 	if gormDB, ok := any(t.MysqlBD).(*gorm.DB); ok {
-		flag = flag && gormDB != nil
+		flag = gormDB != nil
 	}
 	return flag
 }
