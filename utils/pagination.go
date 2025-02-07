@@ -8,11 +8,11 @@ type Pagination struct {
 	PageSize int   `json:"pageSize"`
 }
 
-type PaginationResult struct {
-	Total    int64         `json:"total"`
-	Current  int           `json:"current"`
-	PageSize int           `json:"pageSize"`
-	Row      []interface{} `json:"row"`
+type PaginationResult[T any] struct {
+	Total    int64 `json:"total"`
+	Current  int   `json:"current"`
+	PageSize int   `json:"pageSize"`
+	Row      []T   `json:"row"`
 }
 
 /*
