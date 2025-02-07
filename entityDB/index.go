@@ -6,7 +6,7 @@ import (
 )
 
 type DbStruct[T, D any] struct {
-	Entity  T `json:"entity"`
+	Entity  *T `json:"entity"`
 	MysqlBD D
 }
 
@@ -34,10 +34,10 @@ func (t *DbStruct[T, D]) GetTableName() string {
 		log.Println("DbStruct check failed")
 		return ""
 	}
-	if tableName, ok := any(t.Entity).(interface {
+	if entity, ok := any(t.Entity).(interface {
 		GetTableName() string
 	}); ok {
-		return tableName.GetTableName()
+		return entity.GetTableName()
 	}
 	return ""
 }
