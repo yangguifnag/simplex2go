@@ -9,10 +9,10 @@ type RestFulMsg struct {
 	Success  bool        `json:"success"`
 	Code     int         `json:"code"`
 	Message  string      `json:"message"`
-	Data     interface{} `json:"data"`
-	DateTime string      `json:"dateTime"`
-	Version  string      `json:"version"`
-	Type     string      `json:"type"`
+	Data     interface{} `json:"data,omitempty"`
+	DateTime string      `json:"dateTime,omitempty"`
+	Version  string      `json:"version,omitempty"`
+	Type     string      `json:"type,omitempty"`
 }
 
 type RestFul struct {
