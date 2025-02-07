@@ -63,8 +63,6 @@ func RestFulJson(data interface{}) RestFulMsg {
 		Code:     200,
 		Message:  "ok",
 		Data:     data,
-		DateTime: time.Now().Format(`2011-01-01 11:11:11`),
-		Version:  `1.0`,
-		Type:     "json",
+		DateTime: time.Now().Format("2006-01-02 15:04:05"),
 	}
 }
