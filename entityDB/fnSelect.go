@@ -4,7 +4,7 @@ import "log"
 
 func (t *DbStruct[T, D]) SelectAll() []T {
 	var result []T
-	result = t.SelectByWhere("1=?", "1")
+	result = t.SelectByWhere("1 = ?", 1)
 	return result
 }
 
