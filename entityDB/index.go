@@ -1,12 +1,17 @@
 package entityDB
 
 import (
-	"fmt"
 	"gorm.io/gorm"
 	"log"
 )
 
 type TransactionAction func(tx *gorm.DB) *gorm.DB
+type TransactionActionV2 func(tx *gorm.DB, tranFn ...any) *gorm.DB
+
+type TransactionActionV2Struct struct {
+	Method TransactionActionV2
+	Args   []any
+}
 
 type DbStruct[T, D any] struct {
 	Entity  *T `json:"entity"`
@@ -74,9 +79,31 @@ func (t *DbStruct[T, D]) Transaction(txFn TransactionAction) *gorm.DB {
 		}
 	}()
 	if err := result.Error; err != nil {
-		fmt.Print(err)
-		return tx
+		log.Println("Transaction error:", err)
+		return result
 	}
 
-	return t.TransactionCommit(tx)
+	return t.TransactionCommit(result)
+}
+
+func (t *DbStruct[T, D]) TransactionV2(txFns []TransactionActionV2Struct) *gorm.DB {
+
+	tx := t.TransactionBegin()
+	result := tx
+	for _, txFn := range txFns {
+		result = txFn.Method(result, txFn.Args...)
+		if err := result.Error; err != nil {
+			log.Println("Transaction error:", err)
+			tx.Rollback()
+			return tx
+		}
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	return t.TransactionCommit(result)
 }
