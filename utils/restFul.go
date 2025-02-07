@@ -56,3 +56,15 @@ func (r *RestFul) GetJson() RestFulMsg {
 	r.RestFulMsg.Type = "json"
 	return r.RestFulMsg
 }
+
+func RestFulJson(data interface{}) RestFulMsg {
+	return RestFulMsg{
+		Success:  true,
+		Code:     200,
+		Message:  "ok",
+		Data:     data,
+		DateTime: time.Now().Format(`2011-01-01 11:11:11`),
+		Version:  `1.0`,
+		Type:     "json",
+	}
+}
