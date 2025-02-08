@@ -10,6 +10,7 @@ type RestFulMsg struct {
 	Code     int         `json:"code"`
 	Message  string      `json:"message"`
 	Data     interface{} `json:"data,omitempty"`
+	Info     string      `json:"info,omitempty"`
 	DateTime string      `json:"dateTime,omitempty"`
 	Version  string      `json:"version,omitempty"`
 	Type     string      `json:"type,omitempty"`
@@ -63,6 +64,16 @@ func RestFulJson(data interface{}) RestFulMsg {
 		Code:     200,
 		Message:  "ok",
 		Data:     data,
+		DateTime: time.Now().Format("2006-01-02 15:04:05"),
+	}
+}
+
+func RestFulJsonFail(err string, msg string) RestFulMsg {
+	return RestFulMsg{
+		Success:  false,
+		Code:     500,
+		Info:     err,
+		Message:  msg,
 		DateTime: time.Now().Format("2006-01-02 15:04:05"),
 	}
 }
